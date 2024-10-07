@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_quill/flutter_quill.dart' as quill; // Import for flutter_quill
+import 'package:tok/services/firestore.dart'; // Adjust the import based on your project structure
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth for getting the user ID
+import 'package:tok/modules/welcome.dart'; // Adjust the import based on your project structure
 
 class WritePage extends StatefulWidget {
   @override
@@ -9,6 +12,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
   final quill.QuillController _controller = quill.QuillController.basic(); // Quill controller
+  final FirestoreService _firestoreService = FirestoreService(); // Firestore service instance
 
   // Focus nodes for managing focus
   final FocusNode _titleFocusNode = FocusNode();
@@ -26,23 +30,83 @@ class _WritePageState extends State<WritePage> {
     });
   }
 
-  void _capitalizeFirstLetter() {
-    final text = _controller.document.toPlainText();
-    if (text.isNotEmpty) {
-      // Split the text into sentences
-      final sentences = text.split(RegExp(r'(?<=[.!?]) +'));
-      final capitalizedSentences = sentences.map((sentence) {
-        if (sentence.isNotEmpty) {
-          return sentence[0].toUpperCase() + sentence.substring(1);
-        }
-        return sentence;
-      }).toList();
-      // Join the sentences back together
-      final newText = capitalizedSentences.join(' ');
-      // Update the Quill editor with the new text
-      _controller.replaceText(0, text.length, newText, null);
+  @override
+  void dispose() {
+    _titleFocusNode.dispose();
+    _quillFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _publishPost() async {
+    // Get the current user's ID
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+
+    if (userId != null) {
+      // Get the content from the Quill editor
+      final content = _controller.document.toPlainText();
+      print("Title: $title");
+      print("Content: $content");
+      print("User ID: $userId");
+
+      // Call the Firestore service to add the post
+      await _firestoreService.addPost(title, content, userId);
+
+      // Navigate to the WelcomeScreen after posting
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+      );
+    } else {
+      // Handle the case where the user is not logged in
+      print("User is not logged in.");
     }
   }
+
+  // Toolbar for text formatting
+  // Example of how to use the formatting attributes
+// Widget _buildToolbar() {
+//   return Row(
+//     children: [
+//       IconButton(
+//         icon: Icon(Icons.format_bold),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.bold, true);
+//         },
+//       ),
+//       IconButton(
+//         icon: Icon(Icons.format_italic),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.italic, true);
+//         },
+//       ),
+//       IconButton(
+//         icon: Icon(Icons.format_underline),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.underline, true);
+//         },
+//       ),
+//       // Check for alignment options as well
+//       IconButton(
+//         icon: Icon(Icons.format_align_left),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.align, 'left');
+//         },
+//       ),
+//       IconButton(
+//         icon: Icon(Icons.format_align_center),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.align, 'center');
+//         },
+//       ),
+//       IconButton(
+//         icon: Icon(Icons.format_align_right),
+//         onPressed: () {
+//           _controller.formatSelection(quill.StyleAttribute.align, 'right');
+//         },
+//       ),
+//     ],
+//   );
+// }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,21 +124,22 @@ class _WritePageState extends State<WritePage> {
         ),
         actions: [
           TextButton(
-            onPressed: () {
-              // Handle publish action
-            },
-            child: Text('Publish', style: TextStyle(color: Colors.black)),
+            onPressed: _publishPost, // Call the publish method
+            child: Text('Tok', style: TextStyle(color: Colors.black)),
           ),
         ],
       ),
-      body: Center( // Center the container
+      body: Center(
         child: Container(
-          width: 700, // Set the width of the container
-          padding: EdgeInsets.all(16.0), // Add padding inside the container
+          width: 700,
+          padding: EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Toolbar for text formatting
+                // _buildToolbar(),
+                SizedBox(height: 16),
                 // Editable title field
                 TextField(
                   focusNode: _titleFocusNode,
@@ -97,22 +162,16 @@ class _WritePageState extends State<WritePage> {
                     fontWeight: FontWeight.bold,
                     color: title.isEmpty ? Colors.grey : Colors.black,
                   ),
-                  autofocus: true, // Autofocus on the title field
+                  autofocus: true,
                 ),
                 SizedBox(height: 16),
                 // Quill Editor for user input
                 Container(
-                  height: 400, // Set a fixed height for the editor
+                  height: 400,
                   child: quill.QuillEditor(
                     controller: _controller,
-                    focusNode: _quillFocusNode, // Set focus node for the Quill editor
-                    scrollController: ScrollController(), // For scrollable
-                    // readOnly: false, // Set to true for read-only mode
-                    // placeholder: 'Say Your Mind', // Hint text in the editor
-                    // onChanged: (value) {
-                    //   // Capitalize the first letter of each sentence
-                    //   _capitalizeFirstLetter();
-                    // },
+                    focusNode: _quillFocusNode,
+                    scrollController: ScrollController(),
                   ),
                 ),
                 SizedBox(height: 16),

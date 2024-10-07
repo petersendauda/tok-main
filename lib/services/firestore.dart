@@ -15,4 +15,14 @@ class FirestoreService {
       'timestamp': Timestamp.now(),
     });
   }
+
+  // NEW METHOD TO ADD TITLE AND CONTENT
+  Future<void> addPost(String title, String content, String senderId) {
+    return questionsCollection.add({
+      'title': title,
+      'content': content,
+      'sender_id': senderId,
+      'timestamp': Timestamp.now(),
+    });
+  }
 }

@@ -8,12 +8,11 @@ class WritePage extends StatefulWidget {
 
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
-  String mindText = ''; // Text for "Say Your Mind"
   final quill.QuillController _controller = quill.QuillController.basic(); // Quill controller
 
   // Focus nodes for managing focus
   final FocusNode _titleFocusNode = FocusNode();
-  final FocusNode _mindTextFocusNode = FocusNode();
+  final FocusNode _quillFocusNode = FocusNode(); // Focus node for the Quill editor
 
   @override
   void initState() {
@@ -21,10 +20,28 @@ class _WritePageState extends State<WritePage> {
     // Add listener to the title focus node
     _titleFocusNode.addListener(() {
       if (!_titleFocusNode.hasFocus) {
-        // If title loses focus, move to the next field
-        _mindTextFocusNode.requestFocus();
+        // If title loses focus, move to the Quill editor
+        _quillFocusNode.requestFocus();
       }
     });
+  }
+
+  void _capitalizeFirstLetter() {
+    final text = _controller.document.toPlainText();
+    if (text.isNotEmpty) {
+      // Split the text into sentences
+      final sentences = text.split(RegExp(r'(?<=[.!?]) +'));
+      final capitalizedSentences = sentences.map((sentence) {
+        if (sentence.isNotEmpty) {
+          return sentence[0].toUpperCase() + sentence.substring(1);
+        }
+        return sentence;
+      }).toList();
+      // Join the sentences back together
+      final newText = capitalizedSentences.join(' ');
+      // Update the Quill editor with the new text
+      _controller.replaceText(0, text.length, newText, null);
+    }
   }
 
   @override
@@ -50,71 +67,58 @@ class _WritePageState extends State<WritePage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Editable title field
-            TextField(
-              focusNode: _titleFocusNode,
-              onChanged: (value) {
-                setState(() {
-                  title = value; // Update title as user types
-                });
-              },
-              onSubmitted: (value) {
-                // Move focus to the next field when Enter is pressed
-                _mindTextFocusNode.requestFocus();
-              },
-              decoration: InputDecoration(
-                hintText: 'Title',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 22),
-                border: InputBorder.none,
-              ),
-              style: TextStyle(
-                fontSize: 32,
-                fontWeight: FontWeight.bold,
-                color: title.isEmpty ? Colors.grey : Colors.black,
-              ),
-              autofocus: true, // Autofocus on the title field
+      body: Center( // Center the container
+        child: Container(
+          width: 700, // Set the width of the container
+          padding: EdgeInsets.all(16.0), // Add padding inside the container
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Editable title field
+                TextField(
+                  focusNode: _titleFocusNode,
+                  onChanged: (value) {
+                    setState(() {
+                      title = value; // Update title as user types
+                    });
+                  },
+                  onSubmitted: (value) {
+                    // Move focus to the Quill editor when Enter is pressed
+                    _quillFocusNode.requestFocus();
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Title',
+                    hintStyle: TextStyle(color: Colors.grey, fontSize: 22),
+                    border: InputBorder.none,
+                  ),
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: title.isEmpty ? Colors.grey : Colors.black,
+                  ),
+                  autofocus: true, // Autofocus on the title field
+                ),
+                SizedBox(height: 16),
+                // Quill Editor for user input
+                Container(
+                  height: 400, // Set a fixed height for the editor
+                  child: quill.QuillEditor(
+                    controller: _controller,
+                    focusNode: _quillFocusNode, // Set focus node for the Quill editor
+                    scrollController: ScrollController(), // For scrollable
+                    // readOnly: false, // Set to true for read-only mode
+                    // placeholder: 'Say Your Mind', // Hint text in the editor
+                    // onChanged: (value) {
+                    //   // Capitalize the first letter of each sentence
+                    //   _capitalizeFirstLetter();
+                    // },
+                  ),
+                ),
+                SizedBox(height: 16),
+              ],
             ),
-            SizedBox(height: 16),
-            // Text field for "Say Your Mind"
-            TextField(
-              focusNode: _mindTextFocusNode,
-              onChanged: (value) {
-                setState(() {
-                  mindText = value; // Update mind text as user types
-                });
-              },
-              onSubmitted: (value) {
-                // Add a new line in the Quill editor when Enter is pressed
-                // _controller.insertText(_controller.selection.baseOffset, '\n');
-              },
-              decoration: InputDecoration(
-                hintText: 'Say Your Mind',
-                hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                border: InputBorder.none,
-              ),
-              style: TextStyle(
-                fontSize: 24,
-                color: mindText.isEmpty ? Colors.grey : Colors.black,
-              ),
-            ),
-            SizedBox(height: 16),
-            // Quill Editor for user input
-            Container(
-              height: 400, // Set a fixed height for the editor
-              child: quill.QuillEditor(
-                controller: _controller,
-                focusNode: FocusNode(), // For autofocus
-                scrollController: ScrollController(), // For scrollable
-                // readOnly: false, // Set to true for read-only mode
-              ),
-            ),
-            SizedBox(height: 16),
-          ],
+          ),
         ),
       ),
     );

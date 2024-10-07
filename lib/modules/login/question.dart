@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-// import 'package:awesome_dialog/awesome_dialog.dart';
-// import 'package:flutter_custom_dialog/flutter_custom_dialog.dart';
+import 'package:tok/services/firestore.dart'; // Adjust the import based on your project structure
 
 class QuestionWidget extends StatefulWidget {
   const QuestionWidget({super.key});
@@ -16,6 +15,7 @@ class QuestionWidgetState extends State<QuestionWidget> {
   final TextEditingController _phonenumber = TextEditingController();
   final TextEditingController _subject = TextEditingController();
   String? _issuecategory = "";
+  final FirestoreService _firestoreService = FirestoreService(); // Initialize FirestoreService
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +55,9 @@ class QuestionWidgetState extends State<QuestionWidget> {
                   Navigator.of(context).pop();
                 }, screenSize, isPrimary: false),
                 SizedBox(width: screenSize.width * 0.01),
-                buildButton('Raise Issue', null, () {}, screenSize,
-                    isPrimary: true),
+                buildButton('Raise Issue', null, () {
+                  _raiseIssue(); // Call the method to add the question
+                }, screenSize, isPrimary: true),
               ],
             ),
           ],
@@ -65,8 +66,39 @@ class QuestionWidgetState extends State<QuestionWidget> {
     );
   }
 
-  Widget buildFormField(
-      String label, TextEditingController controller, Size screenSize) {
+  void _raiseIssue() async {
+    // Validate inputs before adding to Firestore
+    if (_name.text.isNotEmpty && _emailaddress.text.isNotEmpty && _phonenumber.text.isNotEmpty && _issuecategory != null && _issuecategory!.isNotEmpty && _subject.text.isNotEmpty) {
+      try {
+        await _firestoreService.addQuestion(
+          _name.text,
+          _emailaddress.text,
+          _phonenumber.text,
+          _issuecategory!,
+          _subject.text,
+        );
+        Navigator.of(context).pop(); // Close the dialog after successful submission
+        
+        // Show a success message at the top of the screen
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Sent Successfully'),
+            behavior: SnackBarBehavior.floating,
+            margin: EdgeInsets.only(top: 500), // Adjust the margin to position it at the top
+            duration: Duration(seconds: 4), // Duration for which the SnackBar is shown
+          ),
+        );
+      } catch (e) {
+        // Handle any errors that occur during the Firestore operation
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to raise question: $e')));
+      }
+    } else {
+      // Show an error message if validation fails
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Please fill in all fields.')));
+    }
+  }
+
+  Widget buildFormField(String label, TextEditingController controller, Size screenSize) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -113,8 +145,7 @@ class QuestionWidgetState extends State<QuestionWidget> {
           },
           items: [
             DropdownMenuItem(child: Text('Select'), value: ''),
-            DropdownMenuItem(
-                child: Text('Login Issues'), value: 'Login Issues'),
+            DropdownMenuItem(child: Text('Login Issues'), value: 'Login Issues'),
             DropdownMenuItem(child: Text('Option 2'), value: 'Option 2'),
             DropdownMenuItem(child: Text('Option 3'), value: 'Option 3'),
           ],
@@ -124,9 +155,7 @@ class QuestionWidgetState extends State<QuestionWidget> {
     );
   }
 
-  Widget buildButton(
-      String text, IconData? icon, VoidCallback onPressed, Size screenSize,
-      {bool isPrimary = false}) {
+  Widget buildButton(String text, IconData? icon, VoidCallback onPressed, Size screenSize, {bool isPrimary = false}) {
     final buttonStyle = ButtonStyle(
       backgroundColor: MaterialStateProperty.resolveWith<Color>(
         (Set<MaterialState> states) {

@@ -1,0 +1,11 @@
+Client ID
+105962563026-69k3ne9tmkmq42nk32jvejtrkcb95qk1.apps.googleusercontent.com
+
+
+ WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      options: FirebaseOptions(
+          apiKey: "AIzaSyDbWxKVO38PDUse5E5E2ICpcnKyiSnIP7E",
+          appId: "1:105962563026:web:5b16e155b223f66446140b",
+          messagingSenderId: "G-ZEKRY387S4",
+          projectId: "tokproject-7f538"));

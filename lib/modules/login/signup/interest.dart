@@ -51,80 +51,88 @@ class _InterestWidgetState extends State<InterestWidget> {
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-              child: GridView.builder(
-                padding: EdgeInsets.all(20),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Number of columns
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+              child: Padding(
+                padding: const EdgeInsets.all(40.0), // Padding around the containers
+                child: Column(
+                  children: [
+                    Wrap(
+                      spacing: 10, // Horizontal space between cards
+                      runSpacing: 10, // Vertical space between cards
+                      children: List.generate(topics.length + 1, (index) {
+                        if (index < topics.length) {
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedTopics[index] = !selectedTopics[index]; // Toggle selection
+                              });
+                            },
+                            child: Container(
+                              width: 200, // Set width to 200 for the boxes
+                              height: 90, // Set height to 90 for the boxes
+                              decoration: BoxDecoration(
+                                color: selectedTopics[index] ? Colors.blue : Colors.grey[300], // Change color based on selection
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              alignment: Alignment.center,
+                              child: Text(
+                                topics[index],
+                                style: TextStyle(
+                                  color: selectedTopics[index] ? Colors.white : Colors.black, // Change text color based on selection
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          // Plus icon for adding more topics
+                          return GestureDetector(
+                            onTap: () {
+                              // Handle adding more topics
+                            },
+                            child: Container(
+                              width: 200, // Set width to 200 for the plus icon
+                              height: 90, // Set height to 90 for the plus icon
+                              decoration: BoxDecoration(
+                                color: Colors.grey[300],
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.black,
+                                size: 30, // Size of the plus icon
+                              ),
+                            ),
+                          );
+                        }
+                      }),
+                    ),
+                    SizedBox(height: 100.0), // Space between topics and buttons
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle continue action
+                      },
+                      child: Text('Continue'),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(350, 50), // Set width to 350
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xFF8B1F41), // Text color
+                      ),
+                    ),
+                    SizedBox(height: 10.0), // Space between buttons
+                    TextButton(
+                      onPressed: () {
+                        // Handle skip action
+                      },
+                      child: Text('Skip for now'),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size(350, 50), // Set width to 350
+                      ),
+                    ),
+                  ],
                 ),
-                itemCount: topics.length + 1, // Add one for the plus icon
-                itemBuilder: (context, index) {
-                  if (index < topics.length) {
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedTopics[index] = !selectedTopics[index]; // Toggle selection
-                        });
-                      },
-                      child: Container(
-                        width: 100, // Set a smaller width for the boxes
-                        height: 50, // Set a fixed height for the boxes
-                        decoration: BoxDecoration(
-                          color: selectedTopics[index] ? Colors.blue : Colors.grey[300], // Change color based on selection
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          topics[index],
-                          style: TextStyle(
-                            color: selectedTopics[index] ? Colors.white : Colors.black, // Change text color based on selection
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    );
-                  } else {
-                    // Plus icon for adding more topics
-                    return GestureDetector(
-                      onTap: () {
-                        // Handle adding more topics
-                      },
-                      child: Container(
-                        width: 100, // Set a smaller width for the plus icon
-                        height: 50, // Set a fixed height for the plus icon
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        alignment: Alignment.center,
-                        child: Icon(
-                          Icons.add,
-                          color: Colors.black,
-                          size: 30, // Size of the plus icon
-                        ),
-                      ),
-                    );
-                  }
-                },
               ),
             ),
-          ),
-          SizedBox(height: 50.0),
-          ElevatedButton(
-            onPressed: () {
-              // Handle continue action
-            },
-            child: Text('Continue'),
-            style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.white, backgroundColor: Color(0xFF8B1F41), // Text color
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              // Handle skip action
-            },
-            child: Text('Skip for now'),
           ),
         ],
       ),

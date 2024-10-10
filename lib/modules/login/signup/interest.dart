@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tok/modules/login/signup/popular.dart'; // Import the PopularWidget
 
 class InterestWidget extends StatefulWidget {
   const InterestWidget({super.key});
@@ -108,21 +109,32 @@ class _InterestWidgetState extends State<InterestWidget> {
                       }),
                     ),
                     SizedBox(height: 100.0), // Space between topics and buttons
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle continue action
-                      },
-                      child: Text('Continue'),
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(350, 50), // Set width to 350
-                        foregroundColor: Colors.white,
-                        backgroundColor: Color(0xFF8B1F41), // Text color
+                    Opacity(
+                      opacity: selectedTopics.contains(true) ? 1.0 : 0.5, // Full opacity if selected, else 50%
+                      child: ElevatedButton(
+                        onPressed: selectedTopics.contains(true) ? () {
+                          // Navigate to PopularWidget if at least one topic is selected
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => PopularWidget()),
+                          );
+                        } : null, // Disable button if no topics are selected
+                        child: Text('Continue'),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(350, 50), // Set width to 350
+                          backgroundColor: Color(0xFF8B1F41), // Button color
+                          foregroundColor: Colors.white, // Text color
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.0), // Space between buttons
                     TextButton(
                       onPressed: () {
-                        // Handle skip action
+                        // Navigate to PopularWidget when skipping
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PopularWidget()),
+                        );
                       },
                       child: Text('Skip for now'),
                       style: TextButton.styleFrom(

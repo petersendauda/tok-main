@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tok/modules/login/signup/monthly_sub.dart'; // Import the MonthlySubscription widget
 
 class PopularWidget extends StatefulWidget {
   const PopularWidget({super.key});
@@ -89,7 +90,11 @@ class _PopularWidgetState extends State<PopularWidget> {
                       opacity: selectedBloggers.contains(true) ? 1.0 : 0.5, // Full opacity if at least one blogger is selected
                       child: ElevatedButton(
                         onPressed: selectedBloggers.contains(true) ? () {
-                          // Handle continue action
+                          // Navigate to MonthlySubscription when "Continue" is pressed
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MonthlySubscription()),
+                          );
                         } : null, // Disable button if no bloggers are selected
                         child: Text('Continue'),
                         style: ElevatedButton.styleFrom(
@@ -102,7 +107,11 @@ class _PopularWidgetState extends State<PopularWidget> {
                     SizedBox(height: 10), // Space between buttons
                     TextButton(
                       onPressed: () {
-                        // Handle skip action
+                        // Navigate to MonthlySubscription when "Skip for now" is pressed
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MonthlySubscription()),
+                        );
                       },
                       child: Text('Skip for now'),
                       style: TextButton.styleFrom(

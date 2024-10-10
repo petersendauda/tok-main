@@ -31,12 +31,16 @@ class _PopularWidgetState extends State<PopularWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final screenHeight = MediaQuery.of(context).size.height; // Get screen height
+
     return Scaffold(
       backgroundColor: Color(0xFFF0F4F9),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center, // Center items vertically
+          crossAxisAlignment: CrossAxisAlignment.center, // Center items horizontally
           children: [
             Text(
               'Bloggers you may want to follow',
@@ -48,49 +52,65 @@ class _PopularWidgetState extends State<PopularWidget> {
               style: TextStyle(fontSize: 16),
             ),
             SizedBox(height: 20),
-            Container(
-              color: Colors.amber,
-              width: 1000,
-              height: 2500,
-              child: Expanded(
-                child: ListView.builder(
-                  itemCount: bloggers.length,
-                  itemBuilder: (context, index) {
-                    return CheckboxListTile(
-                      title: Text(bloggers[index]['name']!),
-                      subtitle: Text(bloggers[index]['description']!),
-                      value: selectedBloggers[index],
-                      onChanged: (bool? value) {
-                        setState(() {
-                          selectedBloggers[index] = value!;
-                        });
-                      },
-                      controlAffinity: ListTileControlAffinity.trailing, // Checkbox on the right
-                    );
-                  },
+            Center( // Center the container
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white, // Change color to white
+                  borderRadius: BorderRadius.circular(20), // Set border radius for rounded edges
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Handle continue action
-              },
-              child: Text('Continue'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(350, 50), // Set width to 350
-                backgroundColor: Color(0xFF8B1F41), // Button color
-                foregroundColor: Colors.white, // Text color
-              ),
-            ),
-            SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                // Handle skip action
-              },
-              child: Text('Skip for now'),
-              style: TextButton.styleFrom(
-                minimumSize: Size(350, 50), // Set width to 350
+                width: 700, // Set width to a fixed value of 700 pixels
+                height: screenHeight * 0.6, // Set height to 60% of screen height
+                child: Column( // Change from ListView to Column for better centering
+                  mainAxisAlignment: MainAxisAlignment.center, // Center items vertically within the container
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: bloggers.length,
+                        itemBuilder: (context, index) {
+                          return CheckboxListTile(
+                            title: Text(
+                              bloggers[index]['name']!,
+                              style: TextStyle(fontWeight: FontWeight.bold), // Make the name bold
+                            ),
+                            subtitle: Text(bloggers[index]['description']!),
+                            value: selectedBloggers[index],
+                            onChanged: (bool? value) {
+                              setState(() {
+                                selectedBloggers[index] = value!;
+                              });
+                            },
+                            controlAffinity: ListTileControlAffinity.trailing, // Checkbox on the right
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 20), // Space between the list and buttons
+                    Opacity(
+                      opacity: selectedBloggers.contains(true) ? 1.0 : 0.5, // Full opacity if at least one blogger is selected
+                      child: ElevatedButton(
+                        onPressed: selectedBloggers.contains(true) ? () {
+                          // Handle continue action
+                        } : null, // Disable button if no bloggers are selected
+                        child: Text('Continue'),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(350, 50), // Set minimum size to 350x50
+                          backgroundColor: Color(0xFF8B1F41), // Button color
+                          foregroundColor: Colors.white, // Text color
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10), // Space between buttons
+                    TextButton(
+                      onPressed: () {
+                        // Handle skip action
+                      },
+                      child: Text('Skip for now'),
+                      style: TextButton.styleFrom(
+                        minimumSize: Size(350, 50), // Set width to 350
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

@@ -30,6 +30,9 @@ class _InterestWidgetState extends State<InterestWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width; // Get screen width
+    final screenHeight = MediaQuery.of(context).size.height; // Get screen height
+
     return Scaffold(
       backgroundColor: Color(0xFFF0F4F9),
       body: Column(
@@ -46,8 +49,8 @@ class _InterestWidgetState extends State<InterestWidget> {
           Padding(
             padding: const EdgeInsets.only(top: 20.0),
             child: Container(
-              width: 1200,
-              height: 600,
+              width: screenWidth * 0.85, // Set width to 85% of screen width for better responsiveness
+              height: screenHeight * 0.7, // Increased height to 70% of screen height
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -108,7 +111,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                         }
                       }),
                     ),
-                    SizedBox(height: 100.0), // Space between topics and buttons
+                    SizedBox(height: 102.0), // Space between topics and buttons
                     Opacity(
                       opacity: selectedTopics.contains(true) ? 1.0 : 0.5, // Full opacity if selected, else 50%
                       child: ElevatedButton(
@@ -121,7 +124,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                         } : null, // Disable button if no topics are selected
                         child: Text('Continue'),
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(350, 50), // Set width to 350
+                          minimumSize: Size(350, 50), // Set minimum size to 350x50
                           backgroundColor: Color(0xFF8B1F41), // Button color
                           foregroundColor: Colors.white, // Text color
                         ),

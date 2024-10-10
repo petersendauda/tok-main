@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../widget/theme/theme_provider.dart';
+// import 'package:provider/provider.dart'; // Commented out provider import
+// import '../../widget/theme/theme_provider.dart'; // Commented out theme provider import
 import '../../modules/write.dart'; // Import the WritePage
 
 class UpdatesWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
     return Column( // Changed from SingleChildScrollView to Column
       children: [
-        _buildWriteBlogCard(themeProvider, context), // Pass context to the card
+        _buildWriteBlogCard(context), // Pass context to the card
         SizedBox(height: 20),
         SingleChildScrollView( // Added SingleChildScrollView here
           child: Column(
             children: [
-              _buildUpdatesCard(themeProvider),
+              _buildUpdatesCard(),
               SizedBox(height: 20),
-              _buildArticlesCard(themeProvider),
+              _buildArticlesCard(),
             ],
           ),
         ),
@@ -24,7 +23,7 @@ class UpdatesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildWriteBlogCard(ThemeProvider themeProvider, BuildContext context) {
+  Widget _buildWriteBlogCard(BuildContext context) {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -40,7 +39,7 @@ class UpdatesWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: themeProvider.themeData.colorScheme.onBackground,
+                color: Colors.black, // Updated to a static color
               ),
             ),
             SizedBox(height: 8),
@@ -49,8 +48,7 @@ class UpdatesWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: themeProvider.themeData.colorScheme.onBackground
-                    .withOpacity(0.7),
+                color: Colors.black.withOpacity(0.7), // Updated to a static color
               ),
             ),
             SizedBox(height: 16),
@@ -83,7 +81,7 @@ class UpdatesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildUpdatesCard(ThemeProvider themeProvider) {
+  Widget _buildUpdatesCard() {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -104,7 +102,7 @@ class UpdatesWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildArticlesCard(ThemeProvider themeProvider) {
+  Widget _buildArticlesCard() {
     return Card(
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
@@ -120,7 +118,7 @@ class UpdatesWidget extends StatelessWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: themeProvider.themeData.colorScheme.onBackground,
+                color: Colors.black, // Updated to a static color
               ),
             ),
             SizedBox(height: 16),

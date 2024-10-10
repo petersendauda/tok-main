@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
 import 'package:provider/provider.dart';
 import 'package:tok/widget/sidebar.dart';
-import 'theme/theme.dart';
 import 'searchbar.dart';
-import 'theme/theme_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
 import 'package:tok/modules/login/login.dart'; // Import the Login page
 
@@ -37,11 +35,10 @@ class _AppBarWidgetState extends State<AppBarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
     Color avatarColor = _getAvatarColor(userEmail); // Get color based on email
 
     return Container(
-      color: themeProvider.themeData.colorScheme.background, // Set background color based on theme
+      color: Colors.white, // Set background color based on theme
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Row(
@@ -52,8 +49,15 @@ class _AppBarWidgetState extends State<AppBarWidget> {
               style: TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.bold,
-                color: themeProvider.themeData.colorScheme.onBackground, // Using theme color
+                color: Colors.black, // Text color
               ),
+            ),
+            // Notification icon
+            IconButton(
+              icon: Icon(Icons.notifications, color: Colors.black), // Notification icon
+              onPressed: () {
+                // Handle notification icon press
+              },
             ),
             // CircleAvatar as a button
             GestureDetector(

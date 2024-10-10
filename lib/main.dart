@@ -2,7 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart'; // Make sure this is imported
 import 'package:tok/modules/login/login.dart';
-import 'package:tok/widget/theme/theme_provider.dart';
+// import 'package:tok/widget/theme/theme_provider.dart'; // Commented out theme provider import
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,20 +25,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        // Add other providers here if needed
-      ],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            home: const Login(),
-            theme: themeProvider.themeData,
-          );
-        },
-      ),
+    return MaterialApp( // Removed MultiProvider and Consumer
+      debugShowCheckedModeBanner: false,
+      home: const Login(),
+      // theme: themeProvider.themeData, // Removed theme property
     );
   }
 }

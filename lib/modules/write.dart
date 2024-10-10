@@ -61,52 +61,6 @@ class _WritePageState extends State<WritePage> {
     }
   }
 
-  // Toolbar for text formatting
-  // Example of how to use the formatting attributes
-// Widget _buildToolbar() {
-//   return Row(
-//     children: [
-//       IconButton(
-//         icon: Icon(Icons.format_bold),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.bold, true);
-//         },
-//       ),
-//       IconButton(
-//         icon: Icon(Icons.format_italic),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.italic, true);
-//         },
-//       ),
-//       IconButton(
-//         icon: Icon(Icons.format_underline),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.underline, true);
-//         },
-//       ),
-//       // Check for alignment options as well
-//       IconButton(
-//         icon: Icon(Icons.format_align_left),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.align, 'left');
-//         },
-//       ),
-//       IconButton(
-//         icon: Icon(Icons.format_align_center),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.align, 'center');
-//         },
-//       ),
-//       IconButton(
-//         icon: Icon(Icons.format_align_right),
-//         onPressed: () {
-//           _controller.formatSelection(quill.StyleAttribute.align, 'right');
-//         },
-//       ),
-//     ],
-//   );
-// }
-
 
   @override
   Widget build(BuildContext context) {

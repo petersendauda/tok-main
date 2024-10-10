@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:grouped_checkbox/grouped_checkbox.dart';
 
 class InterestWidget extends StatefulWidget {
   const InterestWidget({super.key});
@@ -9,159 +8,126 @@ class InterestWidget extends StatefulWidget {
 }
 
 class _InterestWidgetState extends State<InterestWidget> {
-  final List<ColorItem> allItemList = [
-    ColorItem('Red', Colors.red),
-    ColorItem('Green', Colors.green),
-    ColorItem('Blue', Colors.blue),
-    ColorItem('Yellow', Colors.yellow),
-    ColorItem('Black', Colors.black),
-    ColorItem('Violet', Colors.purple),
+  final List<String> topics = [
+    'Culture',
+    'Education',
+    'Politics',
+    'Comics',
+    'Sports',
+    'Finances',
+    'Fintech',
+    'Blockchain',
+    'Faith',
+    'Music',
+    'Arts',
+    'Podcast',
+    'Web 3',
+    'SchoolTech',
   ];
 
-  List<ColorItem> selectedVerticalItems = [];
-  List<ColorItem> selectedHorizontalItems = [];
-  List<ColorItem> selectedWrapItems = [];
+  List<bool> selectedTopics = List.generate(14, (index) => false); // Track selection
 
   @override
-  void initState() {
-    super.initState();
-    selectedVerticalItems = [allItemList[2], allItemList[3]];
-    selectedHorizontalItems = [allItemList[3], allItemList[4]];
-  }
-
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFF0F4F9),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 40.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'We\'ll recommend great topics based on the topics you select',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                ],
+      backgroundColor: Color(0xFFF0F4F9),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 40.0),
+            child: Center(
+              child: Text(
+                'We\'ll recommend great writing based on the topics you select',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 1200,
-                    height: 600,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    child: Column(
-                      children: <Widget>[
-                        buildCheckboxSection(
-                            'VERTICAL ORIENTATION EXAMPLE',
-                            CheckboxOrientation.vertical,
-                            selectedVerticalItems,
-                            updateVerticalItems,
-                            [allItemList[0]]),
-                        Divider(height: 2.0),
-                        buildCheckboxSection(
-                            'HORIZONTAL ORIENTATION EXAMPLE',
-                            CheckboxOrientation.horizontal,
-                            selectedHorizontalItems,
-                            updateHorizontalItems,
-                            [allItemList[1]]),
-                        Divider(height: 2.0),
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.blue),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(8.0)),
-                          ),
-                          margin: EdgeInsets.only(
-                              left: 15.0, right: 15.0, top: 15.0),
-                          height: MediaQuery.of(context).size.height / 4,
-                          width: MediaQuery.of(context).size.width,
-                          child: buildCheckboxSection(
-                              'WRAP ORIENTATION EXAMPLE',
-                              CheckboxOrientation.wrap,
-                              selectedWrapItems,
-                              updateWrapItems,
-                              [allItemList[2]]),
-                        ),
-                        SizedBox(height: 50.0),
-                      ],
-                    ),
-                  ),
-                ],
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Container(
+              width: 1200,
+              height: 600,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
-            )
-          ],
-        ));
+              child: GridView.builder(
+                padding: EdgeInsets.all(20),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3, // Number of columns
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: topics.length + 1, // Add one for the plus icon
+                itemBuilder: (context, index) {
+                  if (index < topics.length) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedTopics[index] = !selectedTopics[index]; // Toggle selection
+                        });
+                      },
+                      child: Container(
+                        width: 100, // Set a smaller width for the boxes
+                        height: 50, // Set a fixed height for the boxes
+                        decoration: BoxDecoration(
+                          color: selectedTopics[index] ? Colors.blue : Colors.grey[300], // Change color based on selection
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          topics[index],
+                          style: TextStyle(
+                            color: selectedTopics[index] ? Colors.white : Colors.black, // Change text color based on selection
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    // Plus icon for adding more topics
+                    return GestureDetector(
+                      onTap: () {
+                        // Handle adding more topics
+                      },
+                      child: Container(
+                        width: 100, // Set a smaller width for the plus icon
+                        height: 50, // Set a fixed height for the plus icon
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: Icon(
+                          Icons.add,
+                          color: Colors.black,
+                          size: 30, // Size of the plus icon
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
+          SizedBox(height: 50.0),
+          ElevatedButton(
+            onPressed: () {
+              // Handle continue action
+            },
+            child: Text('Continue'),
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white, backgroundColor: Color(0xFF8B1F41), // Text color
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // Handle skip action
+            },
+            child: Text('Skip for now'),
+          ),
+        ],
+      ),
+    );
   }
-}
-
-void updateVerticalItems(List<ColorItem> newItems) {
-  // setState(() {
-  //   selectedVerticalItems = newItems;
-  // });
-}
-
-void updateHorizontalItems(List<ColorItem> newItems) {
-  // setState(() {
-  //   selectedHorizontalItems = newItems;
-  // });
-}
-
-void updateWrapItems(List<ColorItem> newItems) {
-  // setState(() {
-  //   selectedWrapItems = newItems;
-  // });
-}
-
-Widget buildCheckboxSection(
-    String title,
-    CheckboxOrientation orientation,
-    List<ColorItem> selectedItems,
-    Function(List<ColorItem>) updateFunction,
-    List<ColorItem> disabledItems) {
-  return Padding(
-    padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-    child: Column(
-      children: <Widget>[
-        Text(
-          title,
-          style: TextStyle(color: Colors.blue, fontSize: 15.0),
-        ),
-        // GroupedCheckbox<ColorItem>(
-        //   itemList: allItemList,
-        //   checkedItemList: selectedItems,
-        //   disabled: disabledItems,
-        //   onChanged: (itemList) {
-        //     updateFunction(itemList!);
-        //   },
-        //   orientation: orientation,
-        //   checkColor: Colors.purpleAccent,
-        //   activeColor: Colors.lightBlue,
-        //   itemWidgetBuilder: (item) => Text(
-        //     item.name,
-        //     style: TextStyle(color: item.color),
-        //   ),
-        // ),
-        SizedBox(height: 5.0),
-        Text(
-          'Selected Colors: ${selectedItems.map((item) => item.name).join(', ')}',
-          style: TextStyle(color: Colors.blue),
-        ),
-      ],
-    ),
-  );
-}
-
-class ColorItem {
-  String name;
-  Color color;
-
-  ColorItem(this.name, this.color);
 }

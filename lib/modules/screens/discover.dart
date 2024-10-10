@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
-import 'package:provider/provider.dart'; // Added import for Provider
+// import 'package:provider/provider.dart'; // Commented out provider import
+// import '../../widget/theme/theme_provider.dart'; // Commented out theme provider import
 import 'package:tok/widget/appbar.dart';
 import 'package:tok/widget/searchbar.dart';
 import 'package:tok/widget/sidebar.dart';
-import '../../widget/theme/theme_provider.dart'; // Added import for ThemeProvider
 
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
@@ -14,19 +14,16 @@ class DiscoverScreen extends StatefulWidget {
 }
 
 class _DiscoverScreenState extends State<DiscoverScreen> {
-  final GlobalKey<SliderDrawerState> _sliderDrawerKey =
-      GlobalKey<SliderDrawerState>();
+  final GlobalKey<SliderDrawerState> _sliderDrawerKey = GlobalKey<SliderDrawerState>();
   late String title;
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context); // Get themeProvider
-
     return Scaffold(
       drawer: DrawerWidget(),
       body: SliderDrawer(
         appBar: SliderAppBar(
-          appBarColor: themeProvider.themeData.colorScheme.background, // Use theme color
+          appBarColor: Colors.white, // Set a static color instead of using theme
           title: AppBarWidget(),
         ),
         key: _sliderDrawerKey,
@@ -43,9 +40,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
           children: [
             Text(
               'data1',
-              style: TextStyle(
-                color: themeProvider.themeData.colorScheme.onBackground, // Use theme color
-              ),
+              style: TextStyle(color: Colors.black), // Set a static color instead of using theme
             ),
           ],
         ),

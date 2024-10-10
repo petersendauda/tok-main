@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:tok/modules/login/signup/interest.dart'; // Import InterestWidget
 import 'package:tok/modules/welcome.dart';
 
 class SignUpGoogleWidget extends StatelessWidget {
@@ -43,7 +44,11 @@ class SignUpGoogleWidget extends StatelessWidget {
           onPressed: () async {
             UserCredential? result = await signInWithGoogle();
             if (result != null) {
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => WelcomeScreen()));
+              // Navigate to InterestWidget after successful sign in
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => InterestWidget()),
+              );
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Google Sign-In failed')),

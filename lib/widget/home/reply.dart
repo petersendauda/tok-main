@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../widget/theme/theme_provider.dart';
+// import 'package:provider/provider.dart'; // Commented out provider import
+// import '../../widget/theme/theme_provider.dart'; // Commented out theme provider import
 
 class ReplyWidget extends StatefulWidget {
   final Function(String) onReply;
@@ -16,7 +16,6 @@ class _ReplyWidgetState extends State<ReplyWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
       child: Row(
@@ -26,19 +25,19 @@ class _ReplyWidgetState extends State<ReplyWidget> {
               controller: _controller,
               decoration: InputDecoration(
                 hintText: 'Add comment',
-                hintStyle: TextStyle(color: themeProvider.themeData.colorScheme.tertiary.withOpacity(0.6)),
+                hintStyle: TextStyle(color: Colors.grey), // Updated to a static color
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
-                  borderSide: BorderSide(color: themeProvider.themeData.colorScheme.tertiary),
+                  borderSide: BorderSide(color: Colors.grey), // Updated to a static color
                 ),
                 filled: true,
-                fillColor: themeProvider.themeData.colorScheme.background,
+                fillColor: Colors.white, // Updated to a static color
               ),
-              style: TextStyle(color: themeProvider.themeData.colorScheme.tertiary),
+              style: TextStyle(color: Colors.black), // Updated to a static color
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send, color: themeProvider.themeData.colorScheme.tertiary),
+            icon: Icon(Icons.send, color: Colors.grey), // Updated to a static color
             onPressed: () {
               if (_controller.text.isNotEmpty) {
                 widget.onReply(_controller.text);

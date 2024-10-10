@@ -7,7 +7,7 @@ import '../widget/home/posts.dart';
 import '../widget/home/updates.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
-import '../widget/theme/theme_provider.dart';
+// import '../widget/theme/theme_provider.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -37,11 +37,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context); // Accessing ThemeProvider
+    // final themeProvider = Provider.of<ThemeProvider>(context); // Removed theme provider
     return Scaffold(
-      backgroundColor: themeProvider.themeData.colorScheme.background, // Set background color
+      // backgroundColor: themeProvider.themeData.colorScheme.background, // Removed background color
       body: Container( // Wrap the body in a Container to ensure full coverage
-        color: themeProvider.themeData.colorScheme.background, // Ensure the container uses the theme background
+        // color: themeProvider.themeData.colorScheme.background, // Removed container color
         child: SliderDrawer(
           appBar: _buildAppBar(),
           key: _sliderDrawerKey,
@@ -56,9 +56,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   SliderAppBar _buildAppBar() {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final themeProvider = Provider.of<ThemeProvider>(context); // Removed theme provider
     return SliderAppBar(
-      appBarColor: themeProvider.themeData.appBarTheme.backgroundColor ?? Colors.white,
+      // appBarColor: themeProvider.themeData.appBarTheme.backgroundColor ?? Colors.white, // Removed app bar color
       title: AppBarWidget(),
     );
   }
@@ -75,7 +75,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Widget _buildMainContent() {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final themeProvider = Provider.of<ThemeProvider>(context); // Removed theme provider
     return Padding(
       padding: const EdgeInsets.all(30.0),
       child: IntrinsicHeight(
@@ -89,7 +89,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Container(
               width: 1,
               height: double.infinity,
-              color: themeProvider.themeData.dividerColor, // Using theme data
+              // color: themeProvider.themeData.dividerColor, // Removed divider color
               margin: EdgeInsets.symmetric(horizontal: 20),
             ),
             Expanded(
@@ -123,13 +123,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   }
 
   Widget _buildSectionTitle(String title) {
-    final themeProvider = Provider.of<ThemeProvider>(context);
+    // final themeProvider = Provider.of<ThemeProvider>(context); // Removed theme provider
     return Text(
       title,
       style: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.bold,
-        color: themeProvider.themeData.textTheme.titleLarge?.color, // Using theme data
+        // color: themeProvider.themeData.textTheme.titleLarge?.color, // Removed text color
       ),
     );
   }

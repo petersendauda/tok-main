@@ -1,10 +1,10 @@
 import 'dart:html' as html; // Import for HTML manipulation
 import 'package:flutter/material.dart';
 import 'package:flutter_slider_drawer/flutter_slider_drawer.dart';
-import 'package:provider/provider.dart'; // Import for Provider
+// import 'package:provider/provider.dart'; // Commented out provider import
+// import '../../widget/theme/theme_provider.dart'; // Commented out theme provider import
 import 'package:tok/widget/appbar.dart';
 import 'package:tok/widget/sidebar.dart';
-import '../../widget/theme/theme_provider.dart'; // Import for ThemeProvider
 
 class FinyaWidget extends StatefulWidget {
   @override
@@ -12,8 +12,7 @@ class FinyaWidget extends StatefulWidget {
 }
 
 class _FinyaWidgetState extends State<FinyaWidget> {
-  final GlobalKey<SliderDrawerState> _sliderDrawerKey =
-      GlobalKey<SliderDrawerState>();
+  final GlobalKey<SliderDrawerState> _sliderDrawerKey = GlobalKey<SliderDrawerState>();
   late String title;
   final TextEditingController _controller = TextEditingController();
   List<String> messages = []; // List to hold chat messages
@@ -41,13 +40,11 @@ class _FinyaWidgetState extends State<FinyaWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final themeProvider = Provider.of<ThemeProvider>(context); // Get themeProvider
-
     return Scaffold(
       drawer: DrawerWidget(), // Drawer for navigation
       body: SliderDrawer(
         appBar: SliderAppBar(
-          appBarColor: themeProvider.themeData.colorScheme.background, // Use theme color
+          appBarColor: Colors.white, // Set a static color instead of using theme
           title: AppBarWidget(),
         ),
         key: _sliderDrawerKey,
@@ -71,7 +68,7 @@ class _FinyaWidgetState extends State<FinyaWidget> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: themeProvider.themeData.colorScheme.onBackground, // Use theme color
+                  color: Colors.black, // Set a static color instead of using theme
                 ),
               ),
             ),

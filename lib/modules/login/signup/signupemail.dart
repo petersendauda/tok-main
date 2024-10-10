@@ -106,9 +106,11 @@ class _SignUpEmailWidgetState extends State<SignUpEmailWidget> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Handle successful sign up
-      Navigator.of(context).pop(); // Close the dialog
-      // Navigate to the next screen or show a success message
+      // Navigate to InterestWidget after successful sign up
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => InterestWidget()),
+      );
     } on FirebaseAuthException catch (e) {
       // Handle sign up errors
       ScaffoldMessenger.of(context).showSnackBar(

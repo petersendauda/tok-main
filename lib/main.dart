@@ -4,6 +4,7 @@ import 'package:provider/provider.dart'; // Make sure this is imported
 import 'package:tok/modules/login/login.dart';
 
 import 'modules/login/signup/interest.dart';
+import 'modules/login/signup/user_info.dart';
 // import 'package:tok/widget/theme/theme_provider.dart'; // Commented out theme provider import
 
 void main() async {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp( // Removed MultiProvider and Consumer
       debugShowCheckedModeBanner: false,
-      home: const InterestWidget(),
+      home: const UserInfo(),
       // theme: themeProvider.themeData, // Removed theme property
     );
   }

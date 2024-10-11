@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:tok/modules/login/signup/interest.dart';
+import 'package:tok/modules/login/signup/user_info.dart' as user_info; // Use a prefix for your import
 
 class SignUpEmailWidget extends StatefulWidget {
   @override
@@ -106,10 +107,10 @@ class _SignUpEmailWidgetState extends State<SignUpEmailWidget> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Navigate to InterestWidget after successful sign up
+      // Navigate to UserInfo after successful sign up
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => InterestWidget()),
+        MaterialPageRoute(builder: (context) => const user_info.UserInfo()), // Use the prefixed name
       );
     } on FirebaseAuthException catch (e) {
       // Handle sign up errors

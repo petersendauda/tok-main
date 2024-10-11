@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
 
-class MonthlySubscription extends StatelessWidget {
+class MonthlySubscription extends StatefulWidget {
   const MonthlySubscription({super.key});
+
+  @override
+  State<MonthlySubscription> createState() => _MonthlySubscriptionState();
+}
+
+class _MonthlySubscriptionState extends State<MonthlySubscription> {
+  bool isAnnual = false; // Track if the annual subscription is selected
+
+  void toggleSubscription(bool isAnnual) {
+    setState(() {
+      this.isAnnual = isAnnual;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,21 +36,23 @@ class MonthlySubscription extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Handle Monthly Subscription
+                    toggleSubscription(false); // Monthly Subscription
                   },
                   child: Text('Monthly Subscription'),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
+                    foregroundColor: Colors.white,
+                    backgroundColor: isAnnual ? Colors.grey : Colors.blue, // Highlight selected option
                   ),
                 ),
                 SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle Annual Subscription
+                    toggleSubscription(true); // Annual Subscription
                   },
                   child: Text('Annual Subscription'),
                   style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white, backgroundColor: Colors.grey, // Text color
+                    foregroundColor: Colors.white,
+                    backgroundColor: isAnnual ? Colors.blue : Colors.grey, // Highlight selected option
                   ),
                 ),
               ],
@@ -48,7 +63,7 @@ class MonthlySubscription extends StatelessWidget {
               children: [
                 SubscriptionCard(
                   title: 'Normal Subscription',
-                  price: 'Le 25 per month',
+                  price: isAnnual ? 'Le 250 per year' : 'Le 25 per month',
                   description: 'Subscribe to our platform and enjoy more reading and writing privileges',
                   onPressed: () {
                     // Handle Normal Subscription
@@ -56,7 +71,7 @@ class MonthlySubscription extends StatelessWidget {
                 ),
                 SubscriptionCard(
                   title: 'Premium Subscription',
-                  price: 'Le 50 per month',
+                  price: isAnnual ? 'Le 500 per year' : 'Le 50 per month',
                   description: 'Subscribe to our platform and enjoy more reading and writing privileges',
                   onPressed: () {
                     // Handle Premium Subscription
@@ -126,14 +141,13 @@ class SubscriptionCard extends StatelessWidget {
               onPressed: onPressed,
               child: Text('Subscribe'),
               style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white, backgroundColor: Color(0xFF8B1F41), // Text color
+                foregroundColor: Colors.white,
+                backgroundColor: Color(0xFF8B1F41), // Button color
                 minimumSize: Size(200, 50), // Increased width for the button
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            Divider()
+            SizedBox(height: 10),
+            Divider(),
           ],
         ),
       ),

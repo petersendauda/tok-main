@@ -32,7 +32,7 @@ class FirestoreService {
   }
 
       Future<void> addUser(String fullName, String emailAddress) {
-    return postsCollection.add({
+    return usersCollection.add({
       'fullname': fullName,
       'emailaddress': emailAddress,
       'timestamp': Timestamp.now(),

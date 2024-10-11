@@ -7,10 +7,10 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FirestoreService _firestoreService2 = FirestoreService(); // Create an instance
+    final FirestoreService _firestoreService = FirestoreService(); // Create an instance
 
     String fullName = '';
-    String email = '';
+    String emailAddress = '';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -43,7 +43,7 @@ class UserInfo extends StatelessWidget {
               SizedBox(height: 20),
               TextField(
                 onChanged: (value) {
-                  email = value; // Capture email
+                  emailAddress = value; // Capture email
                 },
                 decoration: InputDecoration(
                   labelText: 'Your email',
@@ -55,7 +55,7 @@ class UserInfo extends StatelessWidget {
                 onPressed: () async {
                   try {
                     // Handle account creation
-                    await _firestoreService2.addUser(fullName, email); // Add user to Firestore
+                    await _firestoreService.addUser(fullName, emailAddress); // Add user to Firestore
                     // Optionally navigate to another screen or show a success message
                   } catch (e) {
                     // Handle the error, e.g., show a dialog or a snackbar

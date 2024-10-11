@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tok/modules/welcome.dart'; // Import the WelcomeScreen
 
 class MonthlySubscription extends StatefulWidget {
   const MonthlySubscription({super.key});
@@ -67,6 +68,10 @@ class _MonthlySubscriptionState extends State<MonthlySubscription> {
                   description: 'Subscribe to our platform and enjoy more reading and writing privileges',
                   onPressed: () {
                     // Handle Normal Subscription
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const WelcomeScreen()), // Navigate to WelcomeScreen
+                    );
                   },
                 ),
                 SubscriptionCard(
@@ -75,6 +80,10 @@ class _MonthlySubscriptionState extends State<MonthlySubscription> {
                   description: 'Subscribe to our platform and enjoy more reading and writing privileges',
                   onPressed: () {
                     // Handle Premium Subscription
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => const WelcomeScreen()), // Navigate to WelcomeScreen
+                    );
                   },
                 ),
               ],
@@ -82,7 +91,11 @@ class _MonthlySubscriptionState extends State<MonthlySubscription> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                // Handle skip action
+                // Navigate to WelcomeScreen when skipping
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => const WelcomeScreen()), // Navigate to WelcomeScreen
+                );
               },
               child: Text('Skip for now'),
             ),

@@ -107,10 +107,10 @@ class _SignUpEmailWidgetState extends State<SignUpEmailWidget> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      // Navigate to UserInfo after successful sign up
+      // Navigate to UserInfo after successful sign up, passing the user ID and email
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const user_info.UserInfo()), // Use the prefixed name
+        MaterialPageRoute(builder: (context) => user_info.UserInfo(userId: userCredential.user!.uid, email: _emailController.text)), // Pass user ID and email
       );
     } on FirebaseAuthException catch (e) {
       // Handle sign up errors

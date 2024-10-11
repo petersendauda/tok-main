@@ -8,7 +8,7 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('posts');
       
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('username'); // New collection
+      FirebaseFirestore.instance.collection('users'); // Ensure this is the correct collection
 
   // CREATE ADD A NEW QUESTION
   Future<void> addQuestion(String name, String email, String phoneNumber, String issueCategory, String description) {
@@ -31,12 +31,12 @@ class FirestoreService {
     });
   }
 
-      Future<void> addUser(String fullName, String emailAddress) {
-    return usersCollection.add({
-      'fullname': fullName,
-      'emailaddress': emailAddress,
-      'timestamp': Timestamp.now(),
-    });
+      Future<void> addUser(String fullName, String email, String userId) {
+    return usersCollection.doc(userId).set({ // Use userId as the document ID
+      'full_name': fullName,
+      'email': email,
+      'timestamp': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true)); // Merge to avoid overwriting existing data
   }
 
 }

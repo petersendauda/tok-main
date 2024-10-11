@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:tok/modules/login/signup/interest.dart';
 
 import '../../../services/firestore.dart'; // Adjust the import as necessary
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
+  final String userId; // Add a field for user ID
+  final String email; // Add a field for email
+
+  const UserInfo({super.key, required this.userId, required this.email}); // Update constructor to accept userId and email
 
   @override
   Widget build(BuildContext context) {
     final FirestoreService _firestoreService = FirestoreService(); // Create an instance
 
     String fullName = '';
-    String emailAddress = '';
+    String emailAddress = email; // Initialize emailAddress with the passed email
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -42,21 +46,24 @@ class UserInfo extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
-                onChanged: (value) {
-                  emailAddress = value; // Capture email
-                },
+                controller: TextEditingController(text: emailAddress), // Set the email field with the passed email
                 decoration: InputDecoration(
                   labelText: 'Your email',
                   border: OutlineInputBorder(),
                 ),
+                readOnly: true, // Make the email field read-only if you don't want users to edit it
               ),
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   try {
                     // Handle account creation
-                    await _firestoreService.addUser(fullName, emailAddress); // Add user to Firestore
-                    // Optionally navigate to another screen or show a success message
+                    await _firestoreService.addUser(fullName, emailAddress, userId); // Add user to Firestore with userId
+                    // Navigate to InterestWidget after successful account creation
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => InterestWidget()), // Navigate to InterestWidget
+                    );
                   } catch (e) {
                     // Handle the error, e.g., show a dialog or a snackbar
                     print("Error adding user: $e");

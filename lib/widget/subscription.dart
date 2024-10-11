@@ -27,7 +27,7 @@ class MonthlySubscription extends StatelessWidget {
                   },
                   child: Text('Monthly Subscription'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue, // Button color
+                    foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
                   ),
                 ),
                 SizedBox(width: 10),
@@ -37,7 +37,7 @@ class MonthlySubscription extends StatelessWidget {
                   },
                   child: Text('Annual Subscription'),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.grey, // Button color
+                    foregroundColor: Colors.white, backgroundColor: Colors.grey, // Text color
                   ),
                 ),
               ],
@@ -99,7 +99,8 @@ class SubscriptionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10), // Rounded edges
       ),
       child: Container(
-        width: 150, // Fixed width for the cards
+        width: 350, // Set width to 500 pixels for the cards
+        height: 600, // Increased height to 700 pixels for the cards
         padding: EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -116,7 +117,7 @@ class SubscriptionCard extends StatelessWidget {
             SizedBox(height: 10),
             Text(
               title,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22), // Bold and increased font size
             ),
             SizedBox(height: 10),
             Text(description, textAlign: TextAlign.center),
@@ -125,9 +126,14 @@ class SubscriptionCard extends StatelessWidget {
               onPressed: onPressed,
               child: Text('Subscribe'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF8B1F41), // Button color
+                foregroundColor: Colors.white, backgroundColor: Color(0xFF8B1F41), // Text color
+                minimumSize: Size(200, 50), // Increased width for the button
               ),
             ),
+            SizedBox(
+              height: 10,
+            ),
+            Divider()
           ],
         ),
       ),

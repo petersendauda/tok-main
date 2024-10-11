@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tok/modules/login/signup/monthly_sub.dart'; // Import the MonthlySubscription widget
+import 'package:tok/widget/subscription.dart'; // Import the MonthlySubscription widget
 
 class PopularWidget extends StatefulWidget {
   const PopularWidget({super.key});

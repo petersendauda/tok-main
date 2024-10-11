@@ -12,7 +12,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
   final quill.QuillController _controller = quill.QuillController.basic(); // Quill controller
-  final FirestoreService2 _firestoreService2 = FirestoreService2(); // Firestore service instance
+  final FirestoreService _firestoreService2 = FirestoreService(); // Firestore service instance
 
   // Focus nodes for managing focus
   final FocusNode _titleFocusNode = FocusNode();

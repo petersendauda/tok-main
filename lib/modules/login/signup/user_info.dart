@@ -7,7 +7,7 @@ class UserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final FirestoreService2 _firestoreService2 = FirestoreService2(); // Create an instance
+    final FirestoreService _firestoreService2 = FirestoreService(); // Create an instance
 
     String fullName = '';
     String email = '';
@@ -53,8 +53,17 @@ class UserInfo extends StatelessWidget {
               SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
-                  // Handle account creation
-                  await _firestoreService2.addUser(fullName, email); // Add user to Firestore
+                  try {
+                    // Handle account creation
+                    await _firestoreService2.addUser(fullName, email); // Add user to Firestore
+                    // Optionally navigate to another screen or show a success message
+                  } catch (e) {
+                    // Handle the error, e.g., show a dialog or a snackbar
+                    print("Error adding user: $e");
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Failed to create account: $e")),
+                    );
+                  }
                 },
                 child: Text('Create account'),
                 style: ElevatedButton.styleFrom(

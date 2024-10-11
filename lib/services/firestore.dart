@@ -21,6 +21,9 @@ class FirestoreService {
 class FirestoreService2 {
   final CollectionReference postsCollection =
       FirebaseFirestore.instance.collection('posts');
+  
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('username'); // New collection
 
   // CREATE ADD A TO ADD TITLE AND CONTENT
   Future<void> addPost(String title, String content, String senderId) {
@@ -28,6 +31,15 @@ class FirestoreService2 {
       'title': title,
       'content': content,
       'sender_id': senderId,
+      'timestamp': Timestamp.now(),
+    });
+  }
+
+  // ADD A NEW USER
+  Future<void> addUser(String fullName, String email) {
+    return usersCollection.add({
+      'full_name': fullName,
+      'email': email,
       'timestamp': Timestamp.now(),
     });
   }

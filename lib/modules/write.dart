@@ -12,7 +12,7 @@ class WritePage extends StatefulWidget {
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
   final quill.QuillController _controller = quill.QuillController.basic(); // Quill controller
-  final FirestoreService _firestoreService = FirestoreService(); // Firestore service instance
+  final FirestoreService2 _firestoreService2 = FirestoreService2(); // Firestore service instance
 
   // Focus nodes for managing focus
   final FocusNode _titleFocusNode = FocusNode();
@@ -49,7 +49,7 @@ class _WritePageState extends State<WritePage> {
       print("User ID: $userId");
 
       // Call the Firestore service to add the post
-      await _firestoreService.addPost(title, content, userId);
+      await _firestoreService2.addPost(title, content, userId);
 
       // Navigate to the WelcomeScreen after posting
       Navigator.of(context).pushReplacement(

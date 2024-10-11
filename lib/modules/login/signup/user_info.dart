@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../../../services/firestore.dart'; // Adjust the import as necessary
+
 class UserInfo extends StatelessWidget {
   const UserInfo({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final FirestoreService2 _firestoreService2 = FirestoreService2(); // Create an instance
+
+    String fullName = '';
+    String email = '';
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
@@ -25,6 +32,9 @@ class UserInfo extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                onChanged: (value) {
+                  fullName = value; // Capture full name
+                },
                 decoration: InputDecoration(
                   labelText: 'Your full name',
                   border: OutlineInputBorder(),
@@ -32,6 +42,9 @@ class UserInfo extends StatelessWidget {
               ),
               SizedBox(height: 20),
               TextField(
+                onChanged: (value) {
+                  email = value; // Capture email
+                },
                 decoration: InputDecoration(
                   labelText: 'Your email',
                   border: OutlineInputBorder(),
@@ -39,8 +52,9 @@ class UserInfo extends StatelessWidget {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   // Handle account creation
+                  await _firestoreService2.addUser(fullName, email); // Add user to Firestore
                 },
                 child: Text('Create account'),
                 style: ElevatedButton.styleFrom(

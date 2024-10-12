@@ -41,9 +41,17 @@ class _WritePageState extends State<WritePage> {
     // Get the current user's ID
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
+    // Get the content from the Quill editor
+    final content = _controller.document.toPlainText();
+
+    // Check if title or content is empty
+    if (title.isEmpty || content.isEmpty) {
+      // Show an error dialog instead of a SnackBar
+      _showErrorDialog('Please enter both a title and content before posting.');
+      return; // Exit the method if title or content is empty
+    }
+
     if (userId != null) {
-      // Get the content from the Quill editor
-      final content = _controller.document.toPlainText();
       print("Title: $title");
       print("Content: $content");
       print("User ID: $userId");
@@ -58,15 +66,48 @@ class _WritePageState extends State<WritePage> {
     } else {
       // Handle the case where the user is not logged in
       print("User is not logged in.");
+      _showErrorDialog('User is not logged in. Please log in to post.');
     }
   }
 
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Draft'),
+        title: Row(
+          children: [
+            Expanded(
+              child: Text(
+                'Blogging Platform With Content Management System',
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Set text color
+              ),
+            ),
+            TextButton(
+              onPressed: _publishPost, // Call the publish method
+              child: Text('Tok', style: TextStyle(color: Colors.black)),
+            ),
+          ],
+        ),
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: IconThemeData(color: Colors.black),
@@ -76,12 +117,6 @@ class _WritePageState extends State<WritePage> {
             Navigator.of(context).pop(); // Go back to the previous screen
           },
         ),
-        actions: [
-          TextButton(
-            onPressed: _publishPost, // Call the publish method
-            child: Text('Tok', style: TextStyle(color: Colors.black)),
-          ),
-        ],
       ),
       body: Center(
         child: Container(

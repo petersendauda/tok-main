@@ -30,7 +30,7 @@ class UserInfo extends StatelessWidget {
               ),
               SizedBox(height: 10),
               Text(
-                'Finish creating your account for the full Medium experience.',
+                'Finish creating your account and start to TOK.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 16),
               ),

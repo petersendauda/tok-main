@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:tok/widget/sidebar.dart';
 import 'searchbar.dart';
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:tok/modules/login/login.dart'; // Import the Login page
 
 class AppBarWidget extends StatefulWidget {
@@ -15,7 +16,7 @@ class AppBarWidget extends StatefulWidget {
 
 class _AppBarWidgetState extends State<AppBarWidget> {
   late String userName; // User's name
-  late String userEmail; // User's email
+  late String emailAddress; // User's email
 
   @override
   void initState() {
@@ -23,19 +24,23 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     _fetchUserInfo(); // Fetch user info on initialization
   }
 
-  void _fetchUserInfo() {
+  void _fetchUserInfo() async {
     User? user = FirebaseAuth.instance.currentUser; // Get the current user
     if (user != null) {
-      setState(() {
-        userName = user.displayName ?? "User"; // Get display name or default to "User"
-        userEmail = user.email ?? "example@example.com"; // Get email or default
-      });
+      // Fetch user data from Firestore
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('User').doc(user.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          userName = userDoc['username'] ?? "User"; // Get username or default to "User"
+          emailAddress = user.email ?? "example@example.com"; // Get email or default
+        });
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    Color avatarColor = _getAvatarColor(userEmail); // Get color based on email
+    Color avatarColor = _getAvatarColor(emailAddress); // Get color based on email
 
     return Container(
       color: Colors.white, // Set background color based on theme
@@ -98,7 +103,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
             children: [
               CircleAvatar(
                 radius: 20,
-                backgroundColor: _getAvatarColor(userEmail), // Background color for the avatar
+                backgroundColor: _getAvatarColor(emailAddress), // Background color for the avatar
                 child: Text(
                   userName.isNotEmpty ? userName[0].toUpperCase() : 'U', // Initial for the name
                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
@@ -113,7 +118,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    '@${userEmail.split('@')[0]}', // Username
+                    '@${emailAddress.split('@')[0]}', // Username
                     style: TextStyle(color: Colors.grey),
                   ),
                 ],

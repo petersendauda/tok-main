@@ -8,7 +8,7 @@ class FirestoreService {
       FirebaseFirestore.instance.collection('posts');
       
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users'); // Ensure this is the correct collection
+      FirebaseFirestore.instance.collection('User'); // Ensure this is the correct collection
 
   // CREATE ADD A NEW QUESTION
   Future<void> addQuestion(String name, String email, String phoneNumber, String issueCategory, String description) {

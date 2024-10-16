@@ -3,6 +3,13 @@ import 'package:flutter_quill/flutter_quill.dart' as quill; // Import for flutte
 import 'package:tok/services/firestore.dart'; // Adjust the import based on your project structure
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth for getting the user ID
 import 'package:tok/modules/welcome.dart'; // Adjust the import based on your project structure
+import 'package:image_picker/image_picker.dart'; // Import image_picker for image selection
+import 'package:quill/quill.dart';
+
+
+// ... rest of your code
+
+_controller.formatSelection(quill.Style.bold);
 
 class WritePage extends StatefulWidget {
   @override
@@ -99,19 +106,18 @@ class _WritePageState extends State<WritePage> {
           IconButton(
             icon: Icon(Icons.format_bold),
             onPressed: () {
-              _controller.formatSelection(quill.StyleAttribute.new(quill.BoldAttribute as String?));
-            },
+_controller.formatSelection(quill.Style.bold);},
           ),
           IconButton(
             icon: Icon(Icons.format_italic),
             onPressed: () {
-              _controller.formatSelection(quill.StyleAttribute.new(quill.ItalicAttribute as String?));
+              _controller.formatSelection(quill.StyleAttribute.italic);
             },
           ),
           IconButton(
             icon: Icon(Icons.format_underline),
             onPressed: () {
-              _controller.formatSelection(quill.StyleAttribute.new(UnderlineTabIndicator as String?));
+              _controller.formatSelection(quill.StyleAttribute.underline);
             },
           ),
           IconButton(
@@ -119,19 +125,53 @@ class _WritePageState extends State<WritePage> {
             onPressed: () async {
               String? url = await _showLinkDialog();
               if (url != null) {
-                // _controller.formatSelection(quill.StyleAttribute.link, url);
+                _controller.formatSelection(quill.StyleAttribute.link, url);
               }
             },
           ),
           IconButton(
             icon: Icon(Icons.image),
             onPressed: () async {
-              // Implement image picker and upload logic here
-              // For example, you can use image_picker package to select an image
-              // and then insert it into the Quill editor
+              final picker = ImagePicker();
+              final pickedFile = await picker.getImage(source: ImageSource.gallery);
+              if (pickedFile != null) {
+                // Here you can upload the image and get the URL
+                // For demonstration, we will just insert the image URL directly
+                _controller.insertEmbed(_controller.selection.baseOffset, 'image', pickedFile.path);
+              }
             },
           ),
-          // Add more formatting options as needed
+          // Font size dropdown
+          DropdownButton<int>(
+            value: 16, // Default font size
+            items: [12, 14, 16, 18, 20, 24, 28, 32].map((int size) {
+              return DropdownMenuItem<int>(
+                value: size,
+                child: Text('$size', style: TextStyle(fontSize: size.toDouble())),
+              );
+            }).toList(),
+            onChanged: (int? newSize) {
+              if (newSize != null) {
+                _controller.formatSelection(quill.StyleAttribute.size, newSize);
+              }
+            },
+          ),
+          // Font style dropdown
+          DropdownButton<String>(
+            value: 'Normal', // Default font style
+            items: ['Normal', 'Serif', 'Sans Serif'].map((String style) {
+              return DropdownMenuItem<String>(
+                value: style,
+                child: Text(style),
+              );
+            }).toList(),
+            onChanged: (String? newStyle) {
+              if (newStyle != null) {
+                // Apply font style logic here
+                // You may need to define styles in your Quill editor
+              }
+            },
+          ),
         ],
       ),
     );
@@ -235,8 +275,8 @@ class _WritePageState extends State<WritePage> {
                     controller: _controller,
                     focusNode: _quillFocusNode,
                     scrollController: ScrollController(),
-                    // autoFocus: true,
-                    // readOnly: false, // Set to false to allow editing
+                    autoFocus: true,
+                    readOnly: false, // Set to false to allow editing
                   ),
                 ),
                 SizedBox(height: 16),

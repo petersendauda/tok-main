@@ -90,6 +90,80 @@ class _WritePageState extends State<WritePage> {
     );
   }
 
+  // Method to build the toolbar for the Quill editor
+  Widget _buildToolbar() {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: [
+          IconButton(
+            icon: Icon(Icons.format_bold),
+            onPressed: () {
+              _controller.formatSelection(quill.StyleAttribute.new(quill.BoldAttribute as String?));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.format_italic),
+            onPressed: () {
+              _controller.formatSelection(quill.StyleAttribute.new(quill.ItalicAttribute as String?));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.format_underline),
+            onPressed: () {
+              _controller.formatSelection(quill.StyleAttribute.new(UnderlineTabIndicator as String?));
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.link),
+            onPressed: () async {
+              String? url = await _showLinkDialog();
+              if (url != null) {
+                // _controller.formatSelection(quill.StyleAttribute.link, url);
+              }
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.image),
+            onPressed: () async {
+              // Implement image picker and upload logic here
+              // For example, you can use image_picker package to select an image
+              // and then insert it into the Quill editor
+            },
+          ),
+          // Add more formatting options as needed
+        ],
+      ),
+    );
+  }
+
+  Future<String?> _showLinkDialog() async {
+    String? url;
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        TextEditingController urlController = TextEditingController();
+        return AlertDialog(
+          title: Text('Insert Link'),
+          content: TextField(
+            controller: urlController,
+            decoration: InputDecoration(hintText: 'Enter URL'),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                url = urlController.text;
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text('Insert'),
+            ),
+          ],
+        );
+      },
+    );
+    return url;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,7 +201,7 @@ class _WritePageState extends State<WritePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Toolbar for text formatting
-                // _buildToolbar(),
+                _buildToolbar(), // Add the toolbar here
                 SizedBox(height: 16),
                 // Editable title field
                 TextField(
@@ -161,6 +235,8 @@ class _WritePageState extends State<WritePage> {
                     controller: _controller,
                     focusNode: _quillFocusNode,
                     scrollController: ScrollController(),
+                    // autoFocus: true,
+                    // readOnly: false, // Set to false to allow editing
                   ),
                 ),
                 SizedBox(height: 16),

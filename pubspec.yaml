@@ -40,6 +40,7 @@ dependencies:
   flutter_form_builder: ^9.4.1
   flutter_quill: ^10.8.2
   image_picker: ^1.1.2
+  flutter_quill_extensions: ^10.8.2
   
   # Add any other dependencies you need
 

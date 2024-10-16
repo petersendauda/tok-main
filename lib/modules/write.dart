@@ -4,12 +4,7 @@ import 'package:tok/services/firestore.dart'; // Adjust the import based on your
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth for getting the user ID
 import 'package:tok/modules/welcome.dart'; // Adjust the import based on your project structure
 import 'package:image_picker/image_picker.dart'; // Import image_picker for image selection
-import 'package:quill/quill.dart';
-
-
-// ... rest of your code
-
-_controller.formatSelection(quill.Style.bold);
+import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -106,18 +101,19 @@ class _WritePageState extends State<WritePage> {
           IconButton(
             icon: Icon(Icons.format_bold),
             onPressed: () {
-_controller.formatSelection(quill.Style.bold);},
+              _controller.formatSelection(quill.Style.bold);
+            },
           ),
           IconButton(
             icon: Icon(Icons.format_italic),
             onPressed: () {
-              _controller.formatSelection(quill.StyleAttribute.italic);
+              _controller.formatSelection(quill.Style.italic);
             },
           ),
           IconButton(
             icon: Icon(Icons.format_underline),
             onPressed: () {
-              _controller.formatSelection(quill.StyleAttribute.underline);
+              _controller.formatSelection(quill.Style.underline);
             },
           ),
           IconButton(
@@ -125,7 +121,7 @@ _controller.formatSelection(quill.Style.bold);},
             onPressed: () async {
               String? url = await _showLinkDialog();
               if (url != null) {
-                _controller.formatSelection(quill.StyleAttribute.link, url);
+                _controller.formatSelection(quill.Style.link, url);
               }
             },
           ),
@@ -135,8 +131,7 @@ _controller.formatSelection(quill.Style.bold);},
               final picker = ImagePicker();
               final pickedFile = await picker.getImage(source: ImageSource.gallery);
               if (pickedFile != null) {
-                // Here you can upload the image and get the URL
-                // For demonstration, we will just insert the image URL directly
+                // Insert the image into the Quill editor
                 _controller.insertEmbed(_controller.selection.baseOffset, 'image', pickedFile.path);
               }
             },
@@ -152,7 +147,7 @@ _controller.formatSelection(quill.Style.bold);},
             }).toList(),
             onChanged: (int? newSize) {
               if (newSize != null) {
-                _controller.formatSelection(quill.StyleAttribute.size, newSize);
+                _controller.formatSelection(quill.Style.size, newSize);
               }
             },
           ),

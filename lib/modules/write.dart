@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_quill/flutter_quill.dart' as quill; // Import for flutter_quill
 import 'package:tok/services/firestore.dart'; // Adjust the import based on your project structure
 import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth for getting the user ID
 import 'package:tok/modules/welcome.dart'; // Adjust the import based on your project structure
-import 'package:image_picker/image_picker.dart'; // Import image_picker for image selection
-import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
 
 class WritePage extends StatefulWidget {
   @override
@@ -13,7 +10,7 @@ class WritePage extends StatefulWidget {
 
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
-  final quill.QuillController _controller = quill.QuillController.basic(); // Quill controller
+  // final QuillController _controller = QuillController.basic(); // Ensure this line is present
   final FirestoreService _firestoreService2 = FirestoreService(); // Firestore service instance
 
   // Focus nodes for managing focus
@@ -44,19 +41,24 @@ class _WritePageState extends State<WritePage> {
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
     // Get the content from the Quill editor
-    final content = _controller.document.toPlainText();
+    // final content = _controller.document.toPlainText(); // Ensure _controller is initialized
 
     // Check if title or content is empty
-    if (title.isEmpty || content.isEmpty) {
-      // Show an error dialog instead of a SnackBar
-      _showErrorDialog('Please enter both a title and content before posting.');
-      return; // Exit the method if title or content is empty
-    }
+    // if (title.isEmpty || content.isEmpty) {
+    //   // Show an error dialog instead of a SnackBar
+    //   _showErrorDialog('Please enter both a title and content before posting.');
+    //   return; // Exit the method if title or content is empty
+    // }
 
     if (userId != null) {
+      // Assuming content is defined elsewhere in the class or method
+      // If content is not defined, ensure it is initialized or passed as a parameter
+      // For demonstration, let's assume content is a placeholder string
+      String content = "Placeholder content"; // Placeholder content
       print("Title: $title");
       print("Content: $content");
       print("User ID: $userId");
+// Placeholder content
 
       // Call the Firestore service to add the post
       await _firestoreService2.addPost(title, content, userId);
@@ -93,84 +95,7 @@ class _WritePageState extends State<WritePage> {
   }
 
   // Method to build the toolbar for the Quill editor
-  Widget _buildToolbar() {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          IconButton(
-            icon: Icon(Icons.format_bold),
-            onPressed: () {
-              _controller.formatSelection(quill.Style.bold);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.format_italic),
-            onPressed: () {
-              _controller.formatSelection(quill.Style.italic);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.format_underline),
-            onPressed: () {
-              _controller.formatSelection(quill.Style.underline);
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.link),
-            onPressed: () async {
-              String? url = await _showLinkDialog();
-              if (url != null) {
-                _controller.formatSelection(quill.Style.link, url);
-              }
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.image),
-            onPressed: () async {
-              final picker = ImagePicker();
-              final pickedFile = await picker.getImage(source: ImageSource.gallery);
-              if (pickedFile != null) {
-                // Insert the image into the Quill editor
-                _controller.insertEmbed(_controller.selection.baseOffset, 'image', pickedFile.path);
-              }
-            },
-          ),
-          // Font size dropdown
-          DropdownButton<int>(
-            value: 16, // Default font size
-            items: [12, 14, 16, 18, 20, 24, 28, 32].map((int size) {
-              return DropdownMenuItem<int>(
-                value: size,
-                child: Text('$size', style: TextStyle(fontSize: size.toDouble())),
-              );
-            }).toList(),
-            onChanged: (int? newSize) {
-              if (newSize != null) {
-                _controller.formatSelection(quill.Style.size, newSize);
-              }
-            },
-          ),
-          // Font style dropdown
-          DropdownButton<String>(
-            value: 'Normal', // Default font style
-            items: ['Normal', 'Serif', 'Sans Serif'].map((String style) {
-              return DropdownMenuItem<String>(
-                value: style,
-                child: Text(style),
-              );
-            }).toList(),
-            onChanged: (String? newStyle) {
-              if (newStyle != null) {
-                // Apply font style logic here
-                // You may need to define styles in your Quill editor
-              }
-            },
-          ),
-        ],
-      ),
-    );
-  }
+
 
   Future<String?> _showLinkDialog() async {
     String? url;
@@ -236,7 +161,7 @@ class _WritePageState extends State<WritePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Toolbar for text formatting
-                _buildToolbar(), // Add the toolbar here
+                // _buildToolbar(), // Add the toolbar here
                 SizedBox(height: 16),
                 // Editable title field
                 TextField(
@@ -264,16 +189,16 @@ class _WritePageState extends State<WritePage> {
                 ),
                 SizedBox(height: 16),
                 // Quill Editor for user input
-                Container(
-                  height: 400,
-                  child: quill.QuillEditor(
-                    controller: _controller,
-                    focusNode: _quillFocusNode,
-                    scrollController: ScrollController(),
-                    autoFocus: true,
-                    readOnly: false, // Set to false to allow editing
-                  ),
-                ),
+                // Container(
+                //   height: 400,
+                //   child: QuillEditor(
+                //     controller: _controller,
+                //     focusNode: _quillFocusNode,
+                //     scrollController: ScrollController(),
+                //     autoFocus: true,
+                //     readOnly: false, // Set to false to allow editing
+                //   ),
+                // ),
                 SizedBox(height: 16),
               ],
             ),

@@ -39,4 +39,10 @@ class FirestoreService {
     }, SetOptions(merge: true)); // Merge to avoid overwriting existing data
   }
 
+  Stream<QuerySnapshot> getPostsStream() {
+    return postsCollection
+        .orderBy('timestamp', descending: true)
+        .snapshots();
+  }
+
 }

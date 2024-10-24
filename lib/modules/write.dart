@@ -10,21 +10,24 @@ class WritePage extends StatefulWidget {
 
 class _WritePageState extends State<WritePage> {
   String title = ''; // Title variable
-  // final QuillController _controller = QuillController.basic(); // Ensure this line is present
+  String content = ''; // Content variable
+  bool showContentField = false; // Flag to show/hide content field
   final FirestoreService _firestoreService2 = FirestoreService(); // Firestore service instance
 
   // Focus nodes for managing focus
   final FocusNode _titleFocusNode = FocusNode();
-  final FocusNode _quillFocusNode = FocusNode(); // Focus node for the Quill editor
+  final FocusNode _contentFocusNode = FocusNode(); // Focus node for the content field
 
   @override
   void initState() {
     super.initState();
     // Add listener to the title focus node
     _titleFocusNode.addListener(() {
-      if (!_titleFocusNode.hasFocus) {
-        // If title loses focus, move to the Quill editor
-        _quillFocusNode.requestFocus();
+      if (!_titleFocusNode.hasFocus && title.isNotEmpty) {
+        setState(() {
+          showContentField = true; // Show content field when title loses focus
+        });
+        _contentFocusNode.requestFocus(); // Move focus to content field
       }
     });
   }
@@ -32,7 +35,7 @@ class _WritePageState extends State<WritePage> {
   @override
   void dispose() {
     _titleFocusNode.dispose();
-    _quillFocusNode.dispose();
+    _contentFocusNode.dispose();
     super.dispose();
   }
 
@@ -40,21 +43,17 @@ class _WritePageState extends State<WritePage> {
     // Get the current user's ID
     String? userId = FirebaseAuth.instance.currentUser?.uid;
 
-    // Get the content from the Quill editor
-    // final content = _controller.document.toPlainText(); // Ensure _controller is initialized
-
     // Check if title or content is empty
-    // if (title.isEmpty || content.isEmpty) {
-    //   // Show an error dialog instead of a SnackBar
-    //   _showErrorDialog('Please enter both a title and content before posting.');
-    //   return; // Exit the method if title or content is empty
-    // }
+    if (title.isEmpty || content.isEmpty) {
+      // Show an error dialog instead of a SnackBar
+      _showErrorDialog('Please enter both a title and content before posting.');
+      return; // Exit the method if title or content is empty
+    }
 
     if (userId != null) {
       // Assuming content is defined elsewhere in the class or method
       // If content is not defined, ensure it is initialized or passed as a parameter
       // For demonstration, let's assume content is a placeholder string
-      String content = "Placeholder content"; // Placeholder content
       print("Title: $title");
       print("Content: $content");
       print("User ID: $userId");
@@ -138,7 +137,7 @@ class _WritePageState extends State<WritePage> {
             ),
             TextButton(
               onPressed: _publishPost, // Call the publish method
-              child: Text('Tok', style: TextStyle(color: Colors.black)),
+              child: Text('Tok', style: TextStyle(color: Color(0xFFE91E63))), // Updated color
             ),
           ],
         ),
@@ -160,10 +159,7 @@ class _WritePageState extends State<WritePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Toolbar for text formatting
-                // _buildToolbar(), // Add the toolbar here
-                SizedBox(height: 16),
-                // Editable title field
+                // Move the title field closer to the AppBar
                 TextField(
                   focusNode: _titleFocusNode,
                   onChanged: (value) {
@@ -172,8 +168,10 @@ class _WritePageState extends State<WritePage> {
                     });
                   },
                   onSubmitted: (value) {
-                    // Move focus to the Quill editor when Enter is pressed
-                    _quillFocusNode.requestFocus();
+                    setState(() {
+                      showContentField = true; // Show content field on Enter
+                    });
+                    _contentFocusNode.requestFocus(); // Move focus to content field
                   },
                   decoration: InputDecoration(
                     hintText: 'Title',
@@ -187,19 +185,23 @@ class _WritePageState extends State<WritePage> {
                   ),
                   autofocus: true,
                 ),
-                SizedBox(height: 16),
-                // Quill Editor for user input
-                // Container(
-                //   height: 400,
-                //   child: QuillEditor(
-                //     controller: _controller,
-                //     focusNode: _quillFocusNode,
-                //     scrollController: ScrollController(),
-                //     autoFocus: true,
-                //     readOnly: false, // Set to false to allow editing
-                //   ),
-                // ),
-                SizedBox(height: 16),
+                if (showContentField) ...[
+                  SizedBox(height: 16),
+                  TextField(
+                    focusNode: _contentFocusNode,
+                    onChanged: (value) {
+                      setState(() {
+                        content = value;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Content',
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null, // Allow multiple lines
+                  ),
+                ],
               ],
             ),
           ),

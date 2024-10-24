@@ -132,12 +132,15 @@ class _WritePageState extends State<WritePage> {
             Expanded(
               child: Text(
                 'Blogging Platform With Content Management System',
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold), // Set text color
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
-            TextButton(
-              onPressed: _publishPost, // Call the publish method
-              child: Text('Tok', style: TextStyle(color: Color(0xFFE91E63))), // Updated color
+            Container(
+              color: Color(0xFFE91E63),
+              child: TextButton(
+                onPressed: _publishPost,
+                child: Text('Tok', style: TextStyle(color: Colors.white)),
+              ),
             ),
           ],
         ),
@@ -147,7 +150,7 @@ class _WritePageState extends State<WritePage> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.of(context).pop(); // Go back to the previous screen
+            Navigator.of(context).pop();
           },
         ),
       ),
@@ -164,14 +167,14 @@ class _WritePageState extends State<WritePage> {
                   focusNode: _titleFocusNode,
                   onChanged: (value) {
                     setState(() {
-                      title = value; // Update title as user types
+                      title = value;
                     });
                   },
                   onSubmitted: (value) {
                     setState(() {
-                      showContentField = true; // Show content field on Enter
+                      showContentField = true;
                     });
-                    _contentFocusNode.requestFocus(); // Move focus to content field
+                    _contentFocusNode.requestFocus();
                   },
                   decoration: InputDecoration(
                     hintText: 'Title',
@@ -197,9 +200,9 @@ class _WritePageState extends State<WritePage> {
                     decoration: InputDecoration(
                       hintText: 'Content',
                       hintStyle: TextStyle(color: Colors.grey, fontSize: 18),
-                      border: OutlineInputBorder(),
+                      border: InputBorder.none,
                     ),
-                    maxLines: null, // Allow multiple lines
+                    maxLines: null,
                   ),
                 ],
               ],

@@ -136,7 +136,7 @@ class _WritePageState extends State<WritePage> {
               ),
             ),
             Container(
-              color: Color(0xFFE91E63),
+              color: Color(0xFFE91E63), // Set the container color
               child: TextButton(
                 onPressed: _publishPost,
                 child: Text('Tok', style: TextStyle(color: Colors.white)),

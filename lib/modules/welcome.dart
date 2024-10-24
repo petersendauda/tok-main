@@ -8,6 +8,8 @@ import '../widget/home/updates.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 // import '../widget/theme/theme_provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/firestore.dart'; // Import the FirestoreService
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   final GlobalKey<SliderDrawerState> _sliderDrawerKey = GlobalKey<SliderDrawerState>();
   late String title;
+  final FirestoreService _firestoreService = FirestoreService(); // Initialize FirestoreService
 
   @override
   void initState() {
@@ -107,7 +110,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: 20),
-        PostWidget(),
+        PostWidget(
+          username: '',
+          title: 'Example Title',
+          content: 'This is an example content.',
+          timestamp: DateTime.now(), // Added the required 'timestamp' argument
+        ),
       ],
     );
   }

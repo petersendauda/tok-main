@@ -1,53 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'reply.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
-class PostWidget extends StatefulWidget {
-  const PostWidget({super.key});
+class PostWidget extends StatelessWidget {
+  final String username;
+  final String title;
+  final String content;
+  final DateTime timestamp;
 
-  @override
-  State<PostWidget> createState() => _PostWidgetState();
-}
+  const PostWidget({
+    Key? key,
+    required this.username,
+    required this.title,
+    required this.content,
+    required this.timestamp,
+  }) : super(key: key);
 
-class _PostWidgetState extends State<PostWidget> {
-  int _likeCount = 500;
-  bool _isLiked = false;
-  int _commentCount = 0;
-  List<String> _comments = [];
-  bool _isCommentSectionVisible = false;
-  int _saveCount = 0;
-  bool _isSaved = false;
+  String _timeAgo(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
 
-  void _showSavedPopup() {
-    showDialog(
-      context: context,
-      barrierColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.black.withOpacity(0.7),
-          content: Text(
-            "Saved",
-            style: TextStyle(color: Colors.white),
-            textAlign: TextAlign.center,
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-        );
-      },
-    );
-
-    // Automatically dismiss the popup after 1 second
-    Future.delayed(Duration(seconds: 1), () {
-      Navigator.of(context).pop();
-    });
-  }
-
-  void _addComment(String comment) {
-    setState(() {
-      _comments.add(comment);
-      _commentCount++;
-    });
+    if (difference.inDays > 1) {
+      return '${difference.inDays} days ago';
+    } else if (difference.inHours > 1) {
+      return '${difference.inHours} hours ago';
+    } else if (difference.inMinutes > 1) {
+      return '${difference.inMinutes} minutes ago';
+    } else {
+      return 'Just now';
+    }
   }
 
   @override
@@ -56,7 +39,7 @@ class _PostWidgetState extends State<PostWidget> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.white, // Updated to a static color
+            color: Colors.white,
           ),
           child: ElevatedButton(
             onPressed: () {},
@@ -71,7 +54,7 @@ class _PostWidgetState extends State<PostWidget> {
               overlayColor: MaterialStateProperty.resolveWith<Color>(
                 (Set<MaterialState> states) {
                   if (states.contains(MaterialState.pressed)) {
-                    return Colors.grey.withOpacity(0.1); // Updated to a static color
+                    return Colors.grey.withOpacity(0.1);
                   }
                   return Colors.transparent;
                 },
@@ -83,7 +66,7 @@ class _PostWidgetState extends State<PostWidget> {
                 Row(
                   children: [
                     CircleAvatar(
-                      backgroundColor: Colors.blue, // Updated to a static color
+                      backgroundColor: Colors.blue,
                       child: Image.asset(
                         'assets/images/profile.jpeg',
                         fit: BoxFit.cover,
@@ -94,9 +77,9 @@ class _PostWidgetState extends State<PostWidget> {
                     ),
                     TextButton(
                       onPressed: () {},
-                      child: Text("Sahr~Dauda",
+                      child: Text(username,
                           style: TextStyle(
-                            color: Colors.black, // Updated to a static color
+                            color: Colors.black,
                           )),
                     ),
                   ],
@@ -111,7 +94,7 @@ class _PostWidgetState extends State<PostWidget> {
                       height: 120,
                       width: 130,
                       decoration: BoxDecoration(
-                        color: Colors.grey, // Updated to a static color
+                        color: Colors.grey,
                         image: DecorationImage(
                           image: AssetImage("assets/images/tok.jpeg"),
                           fit: BoxFit.cover,
@@ -125,91 +108,34 @@ class _PostWidgetState extends State<PostWidget> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Take A Deep Dive On Tok Application And Its Distinctive Qualities",
+                          title,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
-                            color: Colors.black, // Updated to a static color
+                            color: Colors.black,
                           ),
                         ),
                         SizedBox(
                           height: 20,
                         ),
                         Text(
-                          "Know More About Tok App",
+                          content.length > 30
+                              ? content.substring(0, 30) + '...'
+                              : content,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 10,
-                            color: Colors.black, // Updated to a static color
+                            color: Colors.black,
                           ),
                         ),
                         SizedBox(
                           height: 20,
                         ),
-                        Row(
-                          children: [
-                            Text("$_likeCount",
-                                style: TextStyle(
-                                  color: Colors.black, // Updated to a static color
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (_isLiked) {
-                                      _likeCount--;
-                                      _isLiked = false;
-                                    } else {
-                                      _likeCount++;
-                                      _isLiked = true;
-                                    }
-                                  });
-                                },
-                                icon: Icon(
-                                  _isLiked ? Icons.local_fire_department : Icons.local_fire_department_outlined,
-                                  color: _isLiked ? Colors.red : Colors.black, // Updated to a static color
-                                )),
-                            Text("$_commentCount",
-                                style: TextStyle(
-                                  color: Colors.black, // Updated to a static color
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    _isCommentSectionVisible = !_isCommentSectionVisible;
-                                  });
-                                },
-                                icon: Icon(
-                                  _isCommentSectionVisible ? Icons.message : Icons.message_outlined,
-                                  color: _isCommentSectionVisible ? Colors.blue : Colors.black, // Updated to a static color
-                                )),
-                            Text("$_saveCount",
-                                style: TextStyle(
-                                  color: Colors.black, // Updated to a static color
-                                )),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    if (_isSaved) {
-                                      _saveCount--;
-                                      _isSaved = false;
-                                    } else {
-                                      _saveCount++;
-                                      _isSaved = true;
-                                      _showSavedPopup();
-                                    }
-                                  });
-                                },
-                                icon: Icon(
-                                  _isSaved ? Icons.bookmark : Icons.bookmark_add_outlined,
-                                  color: _isSaved ? Colors.green : Colors.black, // Updated to a static color
-                                )),
-                            Text(
-                              "2 Weeks Ago",
-                              style: TextStyle(
-                                color: Colors.black, // Updated to a static color
-                              ),
-                            ),
-                          ],
+                        Text(
+                          _timeAgo(timestamp),
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ],
                     )
@@ -222,25 +148,6 @@ class _PostWidgetState extends State<PostWidget> {
         SizedBox(
           height: 10,
         ),
-        if (_isCommentSectionVisible) ...[
-          Container(
-            padding: EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                for (var comment in _comments)
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 4.0),
-                    child: Text(
-                      comment,
-                      style: TextStyle(color: Colors.black), // Updated to a static color
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          ReplyWidget(onReply: _addComment),
-        ],
       ],
     );
   }

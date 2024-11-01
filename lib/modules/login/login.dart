@@ -13,6 +13,18 @@ class Login extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.appBarBackground,
       appBar: _buildAppBar(context),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _showQuestionDialog(context),
+        backgroundColor: AppColors.red,
+        label: Text(
+          'Complain',
+          style: TextStyle(
+            color: AppColors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        icon: Icon(Icons.report_problem, color: AppColors.white),
+      ),
       body: LayoutBuilder(
         builder: (BuildContext context, BoxConstraints constraints) {
           return SingleChildScrollView(
@@ -37,7 +49,7 @@ class Login extends StatelessWidget {
             child: Text(
               'Blogging Platform With Content Management System',
               style: TextStyle(
-                color: AppColors.white,
+                color: AppColors.black,
                 fontSize: 25,
                 fontWeight: FontWeight.normal,
               ),
@@ -47,27 +59,10 @@ class Login extends StatelessWidget {
         ],
       ),
       actions: [
-        _buildTokButton(context),
-        SizedBox(width: 8),
         _buildSignInButton(context),
         SizedBox(width: 8),
         _buildGetStartedButton(context),
       ],
-    );
-  }
-
-  Widget _buildTokButton(BuildContext context) {
-    return ElevatedButton(
-      onPressed: () => _showSignUpDialog(context),
-      style: _transparentButtonStyle(),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text('TOK', style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold)),
-          SizedBox(width: 6),
-          Icon(Icons.note_alt_outlined, color: AppColors.white),
-        ],
-      ),
     );
   }
 
@@ -91,20 +86,22 @@ class Login extends StatelessWidget {
     double maxHeight = constraints.maxHeight;
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Divider(color: AppColors.black87),
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: maxWidth * 0.05),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(height: maxHeight * 0.15),
                 _buildBlogTitle(maxWidth),
-                SizedBox(height: maxHeight * 0.04),
+                SizedBox(height: maxHeight * 0.03),
                 _buildJourneyText(maxWidth),
-                SizedBox(height: maxHeight * 0.04),
-                _buildButtons(context, maxWidth),
+                SizedBox(height: maxHeight * 0.03),
+                _buildButtons(maxWidth),
               ],
             ),
           ),
@@ -113,29 +110,62 @@ class Login extends StatelessWidget {
     );
   }
 
+  Widget _buildButtons(double maxWidth) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: () {},
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(AppColors.black),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: maxWidth * 0.02, vertical: 16),
+            ),
+          ),
+          child: Text(
+            'Start Reading',
+            style: TextStyle(color: AppColors.white, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(width: maxWidth * 0.02),
+        ElevatedButton(
+          onPressed: () {},
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(AppColors.white),
+            padding: MaterialStateProperty.all<EdgeInsets>(
+              EdgeInsets.symmetric(horizontal: maxWidth * 0.02, vertical: 16),
+            ),
+          ),
+          child: Text(
+            'Start Writing',
+            style: TextStyle(color: AppColors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildBlogTitle(double maxWidth) {
     return Text(
-      'Blog',
+      'Tell us what you think',
       style: TextStyle(
         shadows: [Shadow(color: AppColors.black, blurRadius: 2.0, offset: Offset(2.0, 2.0))],
-        fontSize: maxWidth * 0.15,
-        color: AppColors.white,
+        fontSize: maxWidth * 0.04,
+        color: AppColors.black,
         fontWeight: FontWeight.bold,
       ),
+      textAlign: TextAlign.center,
     );
   }
 
   Widget _buildJourneyText(double maxWidth) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Join us on a journey of discovery,',
+          'Create, publish, and share your ideas with our powerful blogging platform. Join our community of writers and readers today.',
           style: _journeyTextStyle(maxWidth),
-        ),
-        Text(
-          'inspiration, and meaningful dialogue.',
-          style: _journeyTextStyle(maxWidth),
+          textAlign: TextAlign.center,
         ),
       ],
     );
@@ -144,73 +174,9 @@ class Login extends StatelessWidget {
   TextStyle _journeyTextStyle(double maxWidth) {
     return TextStyle(
       shadows: [Shadow(color: AppColors.black, blurRadius: 1.0, offset: Offset(1.0, 1.0))],
-      fontSize: maxWidth * 0.03,
-      color: AppColors.white,
+      fontSize: maxWidth * 0.019,
+      color: AppColors.black,
       fontWeight: FontWeight.bold,
-    );
-  }
-
-  Widget _buildButtons(BuildContext context, double maxWidth) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          width: maxWidth * 0.18,
-          height: 60,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: ElevatedButton(
-            onPressed: () {
-              showDialog(context: context, builder: (context) => SignUpWidget());
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(AppColors.black),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0))
-              ),
-            ),
-            child: Text(
-              'Tok',
-              style: TextStyle(
-                fontSize: MediaQuery.of(context).size.width * 0.02,
-                color: AppColors.white,
-                fontWeight: FontWeight.bold
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: 16),
-        Container(
-          width: 40,
-          height: 40,
-          child: ElevatedButton(
-            onPressed: () {
-              showDialog(context: context, builder: (context) => QuestionWidget());
-            },
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(AppColors.red),
-              shape: MaterialStateProperty.all<CircleBorder>(CircleBorder()),
-              padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-            ),
-            child: Icon(Icons.question_mark, size: 20, color: AppColors.white),
-          ),
-        ),
-      ],
-    );
-  }
-
-  ButtonStyle _transparentButtonStyle() {
-    return ButtonStyle(
-      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0), side: BorderSide(color: AppColors.white)),
-      ),
-      backgroundColor: MaterialStateProperty.all<Color>(AppColors.transparent),
-      elevation: MaterialStateProperty.all<double>(0),
-      overlayColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
-        if (states.contains(MaterialState.pressed)) return AppColors.white.withOpacity(0.2);
-        return AppColors.appBarBackground;
-      }),
     );
   }
 
@@ -235,6 +201,13 @@ class Login extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) => SignInWidget(),
+    );
+  }
+
+  void _showQuestionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => QuestionWidget(),
     );
   }
 }

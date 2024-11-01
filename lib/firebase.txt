@@ -12,4 +12,6 @@ Client ID
 
 
 
-          “Look around you, everything you see – from the chair you are sitting in, to the cup your coffee is in, to the building covering our heads, to the cars we drove here in – everything was at one time just a vision in someone’s mind before it was created. Everything around us was created by someone with a vision to make the world a better place.”
+          “Look around you, everything you see – from the chair you are sitting in, to the cup your coffee is in, 
+          to the building covering our heads, to the cars we drove here in – everything was at one time just a vision
+          in someone’s mind before it was created. Everything around us was created by someone with a vision to make the world a better place.”
